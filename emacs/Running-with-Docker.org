@@ -6,7 +6,7 @@
 * Mac OS
 
 ** 필요 조건
-- [[../../docker/Running-GUI-Application][Docker에서 GUI 어플리케이션 실행하기]]에서 =XQuartz= 설치 및 설정이 선행되어야 합니다.
+- [[../docker/Running-GUI-Application][Docker에서 GUI 어플리케이션 실행하기]]에서 =XQuartz= 설치 및 설정이 선행되어야 합니다.
 
 ** 시작
 
