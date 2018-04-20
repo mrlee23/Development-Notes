@@ -5,7 +5,7 @@
 
 * 소개
 
-이 문서는 Tensorflow를 python 환경에서 구동하고 =jupyter notebook=과 =tensorboard= 를 Docker로 실행하는 방법을 기술합니다.
+이 문서는 Tensorflow를 python 환경에서 구동하고 =jupyter notebook= 과 =tensorboard= 를 Docker로 실행하는 방법을 기술합니다.
 jupyter와 tensorflow의 공식 지원 이미지를 사용합니다.
 
 * 이미지 가져오기
@@ -22,7 +22,7 @@ jupyter와 tensorflow의 공식 지원 이미지를 사용합니다.
 	  jupyter/tensorflow-notebook start.sh jupyter lab
 	  #+END_SRC
 	  - jupyter의 work 디렉토리인 =/home/jovyan/work= 는 고정된 것이므로 변경하면 볼륨 마운트가 되지 않습니다.(jupyter notebook의 루트 디렉토리로 인식합니다.)
-	  - 최신버전의 경우 =lab= 이 기본으로 설정되어 있습니다. 기존 =tree= 버전을 실행하려면 =lab= 대신 =tree=를 입력하거나 url 주소에 =tree=를 입력하면 됩니다.
+	  - 최신버전의 경우 =lab= 이 기본으로 설정되어 있습니다. 기존 =tree= 버전을 실행하려면 =lab= 대신 =tree= 를 입력하거나 url 주소에 =tree= 를 입력하면 됩니다.
    2. 브라우저에서 localhost:8888로 연결합니다.(연결 시 token 부분을 같이 입력하면 token을 입력하지 않아도 됩니다.)
    3. 아래 코드로 Tensorflow 작동 확인 및 간단한 그래프를 생성합니다.
       #+BEGIN_SRC python :results output :eval never-export :exports both
