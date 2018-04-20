@@ -1,0 +1,47 @@
+#+TITLE: Jupyter에서 VIM 키바인딩 사용하기
+
+* 소개
+**Jupyter** 는 웹 브라우저에서 코드를 작성 하고 실행 및 문서화를 통해 바로 결과를 확인할 수 있는 장점이 있지만 코드 작성 측면시에는 불편함이 많이 따릅니다.
+
+물론 키바인딩이 있지만 하나하나 입맞에 따라 맞추기도 귀찮아 VIM 플러그인을 찾아보았습니다.
+
+역시나 에디터가 있는 곳에는 항상 VIM 플러그인이 존재했습니다.
+
+* 설치 방법
+Jupyter는 기본 확장 기능이 없어서 확장 기능부터 먼저 설치해야 합니다.
+jupyter가 설치되어 있다고 가정하고 진행합니다.
+
+** jupyter_contrib_nbextensions 설치
+1. pip install jupyter_contrib_nbextensions
+2. jupyter contrib nbextension install --user
+
+** jupyter-vim-binding 설치
+1. mkdir -p $(jupyter --data-dir)/nbextensions/vim_binding
+2. jupyter nbextension install https://raw.githubusercontent.com/lambdalisue/jupyter-vim-binding/master/vim_binding.js --nbextensions=$(jupyter --data-dir)/nbextensions/vim_binding
+
+** 활성화 하기
+*** 항상 vim binding을 활성화할 경우
+- jupyter nbextension enable vim_binding/vim_binding
+
+*** config 파일로 조정할 경우
+=/nbconfig/notebook.json= 파일을 수정합니다.
+
+#+BEGIN_SRC js :results output :eval never-export :exports both
+{                                
+  "load_extensions": {          
+    "vim_binding/vim_binding": true
+  }                                
+}  
+#+END_SRC
+
+*** 현재 세션에만 적용할 경우
+#+BEGIN_SRC js :results output :eval never-export :exports both
+%%javascript
+Jupyter.utils.load_extensions('vim_binding/vim_binding');
+
+#+END_SRC
+
+* 참조
+- [[https://github.com/ipython-contrib/jupyter_contrib_nbextensions][jupyter_contrib_nbextensions - GitHub]]
+- [[https://github.com/lambdalisue/jupyter-vim-binding][jupyter-vim-binding - GitHub]]
+- [[https://github.com/lambdalisue/jupyter-vim-binding/wiki/Installation][jupyter-vim-binding 설치 방법]]
