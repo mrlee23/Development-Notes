@@ -1,0 +1,34 @@
+#+TITLE: nvidia 드라이버 설치하기(Linux)
+
+* 기존 버전 제거
+#+BEGIN_SRC sh
+$ dpkg -l | grep nvidia
+#+END_SRC
+
+위의 명령어를 실행했을 때 한개 이상의 패키지가 존재한다면 기존 버전을 제거해야 합니다.
+
+#+BEGIN_SRC sh
+$ sudo apt-get purge nvidia*
+#+END_SRC
+
+** 에러 발생시
+#+BEGIN_EXAMPLE
+You might want to run 'apt-get -f install' to correct these:
+The following packages have unmet dependencies:
+...
+#+END_EXAMPLE
+
+만약 여기서 위와 같은 에러가 발생 시 아래 명령을 실행합니다.
+
+#+BEGIN_SRC sh
+$ sudo apt --fix-broken install
+$ sudo apt-get update
+$ sudo apt-get upgrade
+#+END_SRC
+
+* 새로운 버전 설치
+[[http://www.nvidia.co.kr/Download/index.aspx?lang=kr][엔비디아 드라이버 다운로드]] 에서 드라이버 다운로드
+
+#+BEGIN_SRC sh
+
+#+END_SRC
