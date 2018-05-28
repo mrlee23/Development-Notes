@@ -1,0 +1,77 @@
+#+TITLE: nvidia-docker 설치하기
+
+* 요구사항
+nvidia-docker를 설치하기 위해서 최신 docker stable 버전을 유지해야 한다.
+
+* 버전에 맞는 Docker 설치 방법
+** 기존 Docker 제거
+#+BEGIN_SRC sh
+$ dpkg -l | grep -i docker # 기존 Docker 설치 확인
+$ sudo apt-get purge -y docker-ce # Docker 제거
+$ sudo apt-get autoremove -y --purge docker-ce
+$ sudo apt-get autoclean
+$ sudo rm -rf /var/lib/docker
+$ sudo rm /etc/apparmor.d/docker
+#+END_SRC
+
+** 버전에 맞는 Docker 설치(18.03.1 버전 기준)
+*** Ubuntu 16.04
+#+BEGIN_SRC sh
+$ sudo apt-get install apt-transport-https ca-certificates curl software-properties-common
+$ curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
+$ sudo add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu xenial stable"
+$ sudo apt-get update
+#+END_SRC
+
+*** Ubuntu 18.04
+#+BEGIN_SRC sh
+$ sudo apt install apt-transport-https ca-certificates curl software-properties-common
+$ curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
+$ sudo add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu bionic test"
+$ sudo apt update
+#+END_SRC
+
+*** 설치
+#+BEGIN_SRC sh
+sudo apt-get install docker-ce=18.03.1~ce-0~ubuntu
+#+END_SRC
+
+** nvidia-docker 설치
+#+BEGIN_SRC sh
+$ curl -s -L https://nvidia.github.io/nvidia-docker/gpgkey | \
+  sudo apt-key add -
+$ curl -s -L https://nvidia.github.io/nvidia-docker/ubuntu16.04/amd64/nvidia-docker.list | \
+  sudo tee /etc/apt/sources.list.d/nvidia-docker.list
+$ sudo apt-get update
+$ sudo apt-get install -y nvidia-docker2
+$ sudo service docker restart
+#+END_SRC
+
+** 설치 확인
+#+BEGIN_SRC sh
+sudo nvidia-docker pull nvidia/cuda nvidia-smi
+sudo nvidia-docker run --rm nvidia/cuda nvidia-smi
+#+END_SRC
+
+#+BEGIN_EXAMPLE
++-----------------------------------------------------------------------------+
+| NVIDIA-SMI 390.48                 Driver Version: 390.48                    |
+|-------------------------------+----------------------+----------------------+
+| GPU  Name        Persistence-M| Bus-Id        Disp.A | Volatile Uncorr. ECC |
+| Fan  Temp  Perf  Pwr:Usage/Cap|         Memory-Usage | GPU-Util  Compute M. |
+|===============================+======================+======================|
+|   0  GeForce GTX 750 Ti  Off  | 00000000:05:00.0  On |                  N/A |
+| 34%   29C    P8     1W /  38W |    252MiB /  2000MiB |      1%      Default |
++-------------------------------+----------------------+----------------------+
+
++-----------------------------------------------------------------------------+
+| Processes:                                                       GPU Memory |
+|  GPU       PID   Type   Process name                             Usage      |
+|=============================================================================|
++-----------------------------------------------------------------------------+
+#+END_EXAMPLE
+
+* 참조
+- [[https://stackoverflow.com/questions/44760648/how-to-remove-docker-completely-from-ubuntu-14-04][Docker 삭제]]
+- [[https://unix.stackexchange.com/questions/363048/unable-to-locate-package-docker-ce-on-a-64bit-ubuntu][Docker 설치]]
+- [[http://www.kwangsiklee.com/ko/2018/02/%EC%A0%95%EB%A6%AC-ubuntu%EC%84%9C%EB%B2%84%EC%97%90-nvidia-docker-%EC%84%A4%EC%B9%98-%ED%95%98%EA%B8%B0/][nvidia-docker 설치하기]]
