@@ -38,6 +38,7 @@ sudo apt-get install docker-ce=18.03.1~ce-0~ubuntu
 (Ubuntu 18.04에서 해당 버전을 못찾을 경우, Ubuntu 16.04 과정으로 진행하면 됩니다.)
 
 ** nvidia-docker 설치
+반드시 docker를 최신 stable 버전으로 유지해야 설치가 가능합니다.
 #+BEGIN_SRC sh
 $ curl -s -L https://nvidia.github.io/nvidia-docker/gpgkey | \
   sudo apt-key add -
