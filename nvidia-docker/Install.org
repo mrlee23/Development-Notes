@@ -35,6 +35,7 @@ $ sudo apt update
 #+BEGIN_SRC sh
 sudo apt-get install docker-ce=18.03.1~ce-0~ubuntu
 #+END_SRC
+(Ubuntu 18.04에서 해당 버전을 못찾을 경우, Ubuntu 16.04 과정으로 진행하면 됩니다.)
 
 ** nvidia-docker 설치
 #+BEGIN_SRC sh
