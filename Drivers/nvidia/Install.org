@@ -21,14 +21,15 @@ The following packages have unmet dependencies:
 만약 여기서 위와 같은 에러가 발생 시 아래 명령을 실행합니다.
 
 #+BEGIN_SRC sh
+$ sudo add-apt-repository ppa:graphics-drivers
 $ sudo apt --fix-broken install
 $ sudo apt-get update
 $ sudo apt-get upgrade
 #+END_SRC
 
 * 새로운 버전 설치
+** CUDA toolkit 포함
+[[https://developer.nvidia.com/cuda-downloads?target_os=Linux&target_arch=x86_64&target_distro=Ubuntu&target_version=1710&target_type=debnetwork][엔비디아 CUDA 툴킷 다운로드]]
+
+** CUDA toolkit 제외
 [[http://www.nvidia.co.kr/Download/index.aspx?lang=kr][엔비디아 드라이버 다운로드]] 에서 드라이버 다운로드
-
-#+BEGIN_SRC sh
-
-#+END_SRC
