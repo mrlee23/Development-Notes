@@ -1,6 +1,6 @@
 #+TITLE: Hyperledger fabric install
 
-* Install
+* Prerequisites
 ** Docker
 - sudo add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable"
 - sudo apt-get update
@@ -16,3 +16,6 @@
 ** NodeJS < 9
 - curl -sL https://deb.nodesource.com/setup_8.x | sudo -E bash -
 - sudo apt-get install -y nodejs
+
+* Install
+- curl -sSL https://goo.gl/6wtTN5 | sudo bash -s 1.1.0
