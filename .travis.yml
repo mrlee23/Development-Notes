@@ -1,0 +1,11 @@
+sudo: true
+language: generic
+services:
+  - docker
+branches:
+  only:
+    - deploy
+before_script:
+  - git submodule update
+after_success:
+  - if [ "$TRAVIS_BRANCH" == "deploy" ]; then bash build.sh gh-pages; fi
