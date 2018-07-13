@@ -1,0 +1,29 @@
+#+TITLE: Emacs를 Docker로 실행하기
+#+DATE: 2018-04-19 
+#+AUTHOR: Dongsoo Lee
+#+EMAIL: dongsoolee8@gmail.com
+
+* Mac OS
+
+** 필요 조건
+- [[../docker/Running-GUI-Application.org][Docker에서 GUI 어플리케이션 실행하기]]에서 =XQuartz= 설치 및 설정이 선행되어야 합니다.
+
+** 시작
+
+=XQuartz= 패키지가 실행되었고 =$DISPLAY_IP= 변수가 적용되었다고 가정하고 진행합니다.
+
+#+BEGIN_SRC sh
+docker run -it --rm --name emacs\
+ -e DISPLAY=$DISPLAY_IP:0\
+ -e UNAME="emacser"\
+ -e GNAME="emacsers"\
+ -e UID="1000"\
+ -e GID="1000"\
+ -v <.emacs.d 위치>:/home/emacs/.emacs.d\
+ -v <그 외 작업 디렉토리 위치>:/mnt/workspace\
+ jare/emacs emacs
+#+END_SRC
+
+
+* 참조
+- [[https://hub.docker.com/r/jare/emacs/][jare/emacs - Docker Hub]]

@@ -1,0 +1,49 @@
+#+TITLE: Docker에서 GUI 어플리케이션 실행하기
+#+DATE: 2018-04-19
+#+AUTHOR: Dongsoo Lee
+#+EMAIL: dongsoolee8@gmail.com
+
+이 문서는 Docker 컨테이너 실행 시 =DISPLAY= 옵션에 대해서 다룹니다.
+
+* Mac OS
+
+GUI를 연결하기 위해서 [[https://www.xquartz.org/releases/XQuartz-2.7.10.html][Xquartz]]의 X11 서버 및 클라이언트 라이브러가 필요합니다.
+
+** 설치 방법
+1. [[https://dl.bintray.com/xquartz/downloads/XQuartz-2.7.10.dmg][XQuartz-2.7.10.dmg]] 다운로드(현재 버전인 2.7.11 은 맥용 Docker에서 작동하지 않습니다.)
+2. XQuartz 설치(관리자 권한 필요)
+3. 설치 후 시스템 로그아웃 혹은 재부팅
+
+** 실행 방법
+
+1. =open -a XQuartz= : XQuartz 실행
+2. 실행 후 환경 설정(~⌘ ,~)에서 "보안 > 네트워크 클라이언트에서의 연결을 허용" 체크
+3. =DISPLAY_IP=`ifconfig en0 | grep "inet " | cut -d " " -f2`=
+4. =xhost + $DISPLAY_IP=
+   - "<IP 주소> being added to access control list" 의 메시지가 나오면 정상적으로 IP가 추가 된 것입니다.
+5. =docker run --rm -it --name emacs -e DISPLAY=$DISPLAY_ID:0 jess/geary=
+
+** 사용 예
+
+- [[../emacs/Running-with-Docker.org][Emacs를 Docker로 실행하기]]
+
+** 오류 확인
+- =lsof -i :6000=
+현재 =X11.bin= 명령이 TCP 6000 포트로 열려있는지 확인하세요.
+
+** XQuarz 제거 방법(요세미티/엘 캐피탄/시에라)
+
+# #+BEGIN_SRC sh
+# launchctl unload /Library/LaunchAgents/org.macosforge.xquartz.startx.plist && \
+# sudo launchctl unload /Library/LaunchDaemons/org.macosforge.xquartz.privileged_startx.plist && \
+# sudo rm -rf /opt/X11* /Library/Launch*/org.macosforge.xquartz.* /Applications/Utilities/XQuartz.app /etc/*paths.d/*XQuartz  && \
+# sudo pkgutil --forget org.macosforge.xquartz.pkg  && \
+# rm -rf ~/.serverauth* && rm -rf ~/.Xauthorit* && rm -rf ~/.cache && rm -rf ~/.rnd && \
+# rm -rf ~/Library/Caches/org.macosforge.xquartz.X11 && rm -rf ~/Library/Logs/X11
+# #+END_SRC
+
+- [[https://gist.github.com/pwnsdx/d127873e24cef159d4d603accaf37ee4][Gist 참조]]
+
+* 참조
+- [[https://github.com/chanezon/docker-tips/blob/master/x11/README.md][Running Graphical applications in Docker for Mac]]
+- [[https://www.xquartz.org/][XQaurtz]]

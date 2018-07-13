@@ -1,0 +1,50 @@
+#+TITLE: Tensorflow를 Docker로 실행하기
+#+DATE: 2018-04-20
+#+AUTHOR: Dongsoo Lee
+#+EMAIL: dongsoolee8@gmail.com
+
+* 소개
+
+이 문서는 Tensorflow를 python 환경에서 구동하고 =jupyter notebook= 과 =tensorboard= 를 Docker로 실행하는 방법을 기술합니다.
+jupyter와 tensorflow의 공식 지원 이미지를 사용합니다.
+
+* 이미지 가져오기
+- docker pull tensorflow/tensorflow
+- docker pull jupyter/tensorflow-notebook
+
+* 실행
+1. 마운트할 디렉토리가 위치한 곳을 현재 디렉토리로 만듭니다.
+2. jupyter notebook를 실행합니다.(tensorflow/tensorflow 내에 =jupyter notebook=이 내장되어 있긴 하지만 버전이 낮고 지원 기능도 적기 때문에 jupyter 이미지를 사용하는 것을 추천합니다)
+   1. 실행
+	  #+BEGIN_SRC sh
+	  docker run --rm -it -p 8888:8888 \
+	  -v "`pwd`:/home/jovyan/work" \
+	  jupyter/tensorflow-notebook start.sh jupyter lab
+	  #+END_SRC
+	  - jupyter의 work 디렉토리인 =/home/jovyan/work= 는 고정된 것이므로 변경하면 볼륨 마운트가 되지 않습니다.(jupyter notebook의 루트 디렉토리로 인식합니다.)
+	  - 최신버전의 경우 =lab= 이 기본으로 설정되어 있습니다. 기존 =tree= 버전을 실행하려면 =lab= 대신 =tree= 를 입력하거나 url 주소에 =tree= 를 입력하면 됩니다.
+   2. 브라우저에서 localhost:8888로 연결합니다.(연결 시 token 부분을 같이 입력하면 token을 입력하지 않아도 됩니다.)
+   3. 아래 코드로 Tensorflow 작동 확인 및 간단한 그래프를 생성합니다.
+      #+BEGIN_SRC python :results output :eval never-export :exports both
+      import tensorflow as tf
+
+      tf.reset_default_graph()
+
+      a = tf.add(3, 5)
+
+      writer = tf.summary.FileWriter('./graphs', tf.get_default_graph())
+      writer.close()
+      #+END_SRC
+3. tensorboard를 실행합니다.
+   1. 실행
+	  #+BEGIN_SRC sh
+	  docker run --rm -it -p 6006:6006
+	  -v "`pwd`/graphs:/tf_logs" \
+	  tensorflow/tensorflow bash -c "cd .. && tensorboard --logdir tf_logs"
+	  #+END_SRC
+	  - jupyter notebook 에서 graphs 디렉토리가 존재하고 내부에 Tensorflow 그래프 파일이 있어야 정상작동합니다.
+   2. 브라우저에서 localhost:6006으로 연결합니다.
+
+* 참조
+- [[https://hub.docker.com/r/jupyter/tensorflow-notebook/][jupyter/tensorflow-notebook - Docker Hub]]
+- [[https://hub.docker.com/r/tensorflow/tensorflow/][tensorflow/tensorflow - Docker Hub]]

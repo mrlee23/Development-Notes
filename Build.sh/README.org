@@ -1,0 +1,97 @@
+#+TITLE: Build.sh
+
+* Introduction
+This project provide a simple shell script for manipulate git branches automatically with Continuous Integrations.
+
+You can release a version or publish docs on GitHub-pages just using commit message.
+
+* How to use
+
+** using Git submodule
+
+1. add submodule on your git repository.
+	#+BEGIN_SRC sh
+git submodule add https://github.com/mrlee23/Build.sh
+git submodule update --init
+	#+END_SRC
+2. configure your =.travis.yml= file
+	#+BEGIN_SRC yaml
+before_script:
+  - git submodule update
+after_success:
+  - if [ "$TRAVIS_BRANCH" == "master" ]; then bash build.sh release; fi
+	#+END_SRC
+
+
+** using File
+
+Download source at [[https://raw.githubusercontent.com/mrlee23/Build.sh/master/build.sh]]
+
+*** example of .travis.yml
+#+BEGIN_SRC yaml
+before_script:
+  - curl -o build.sh https://raw.githubusercontent.com/mrlee23/Build.sh/master/build.sh
+
+after_success: if [ "$TRAVIS_BRANCH" == "master" ]; then bash build.sh release; fi
+#+END_SRC
+
+
+* Global Variables
+- =GH_TOKEN= <Required> : GitHub token.
+- =GIT_USER_NAME= <Optional>
+- =GIT_USER_EMAIL= <Optional>
+
+* Commands
+
+** =release=
+- Make 'release' branch.
+- Detecting released commit or not.
+- Commit & Push a released commit only.
+- After finished releasing sequences, will be checkout to branch selected before.
+- After then, you can publish to package manager with =release= branch. (eg. npm publish)
+- Commit message will be generating to "Production: <commit message> from <commit hash>".
+
+*** Variables
+**** required
+- =GH_TOKEN=
+
+**** optional
+- =RELEASE_LABEL= : Default is 'Production'
+- =RELEASE_BRANCH= : Release branch name. This branch will be checkout using orphan option.
+- =RELEASE_DIR= : Temporary directory to save exists repo data.
+- =RELEASE_REGEXP= : REGEXP for check that repo has a releasable commit.
+- =RELEASE_VERSION_REGEXP= : REGEXP for detect version number.
+- =RELEASE_WITH_VERSION= : Generate commit message using version or not.(default: TRUE)
+
+** =publish=
+- Make 'publish' branch.
+- Always commit and push.
+- Needs '.publish' or =PUBLISH_DIR= directory to deploy contents.
+- Commit message will be generating to "Publish: <commit message> from <commit hash>".
+- Same actions with =gh-pages=.
+
+*** Variables
+**** required
+- =GH_TOKEN=
+
+**** optional
+- =PUBLISH_LABEL= : Default is 'Publish'
+- =PUBLISH_BRANCH=
+- =PUBLISH_DIR=
+- =PUBLISH_COMMIT_MSG=
+
+** =gh-pages=(Github Pages)
+- Make 'gh-pages' branch.
+- Always commit and push.
+- Needs '.gh-pages' directory to deploy contents.
+- Commit message will be generating to "Pages: <commit message> from <commit hash>".
+
+*** Variables
+**** required
+- =GH_TOKEN=
+
+**** optional
+- =GH_PAGES_LABEL= : Default is 'Pages'
+- =GH_PAGES_BRANCH=
+- =GH_PAGES_DIR=
+- =GH_PAGES_COMMIT_MSG=
