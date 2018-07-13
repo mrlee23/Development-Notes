@@ -5,7 +5,24 @@ services:
 branches:
   only:
     - deploy
+before_install:
+  - >
+    DOCKER_RUN () {
+    docker run --rm
+    --volume "$CURRENT_DIR:/mnt/"
+    --name dev
+    dongsoolee/ubuntu-development /bin/bash -c "cd /mnt;$1";
+    }
+
 before_script:
   - git submodule update
+script:
+  - DOCKER_RUN "make publish"
 after_success:
   - if [ "$TRAVIS_BRANCH" == "deploy" ]; then bash Build.sh/build.sh gh-pages; fi
+
+env:
+  matrix:
+    - CURRENT_DIR=`pwd`;
+      GIT_USER_NAME="Dongsoo Lee";
+      GIT_USER_EMAIL="dongsoolee8@gmail.com"

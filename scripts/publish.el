@@ -1,9 +1,9 @@
 (require 'org)
 (setq org-publish-project-alist
 		  `(("Org"
-		     :base-directory "./"
+		     :base-directory "./contents"
 		     :base-extension "org"
-		     :publishing-directory ,(expand-file-name "../gh-pages")
+		     :publishing-directory ,(expand-file-name "./gh-pages")
 		     :publishing-function org-html-publish-to-html
 		     :override t
 		     :headline-levels 4
