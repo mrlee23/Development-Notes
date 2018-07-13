@@ -8,4 +8,4 @@ branches:
 before_script:
   - git submodule update
 after_success:
-  - if [ "$TRAVIS_BRANCH" == "deploy" ]; then bash build.sh gh-pages; fi
+  - if [ "$TRAVIS_BRANCH" == "deploy" ]; then bash Build.sh/build.sh gh-pages; fi
