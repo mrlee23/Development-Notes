@@ -1,0 +1,22 @@
+#+TITLE: Hyperledger Insurance App
+
+이 문서는 [[https://github.com/IBM/build-blockchain-insurance-app][IBM/build-blockchain-insurance-app]] 상세 시스템 설명을 위한 문서입니다.
+
+본 문서는 Hyperledger Fabric 버전 1.1을 기준으로 작성되었습니다.
+
+* 실행 방법
+
+** 설치 및 실행
+#+BEGIN_SRC sh
+$ git clone https://github.com/IBM/build-blockchain-insurance-app.git
+$ cd build-blockchain-insurance-app
+$ ./build_mac.sh # 맥일 경우
+$ ./build_ubuntu.sh # 우분투일 경우
+#+END_SRC
+
+** 실행 확인
+#+BEGIN_SRC sh
+$ docker logs web
+#+END_SRC
+
+web 컨테이너에 오류가 없는지 확인하고 http://localhost:3000 에 접속하면 insurance 웹 페이지를 볼 수 있다.
