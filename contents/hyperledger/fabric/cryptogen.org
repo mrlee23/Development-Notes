@@ -1,0 +1,17 @@
+#+TITLE: Cryptogen 명령어
+
+이 문서는 Hyperledger Fabric의 cryptogen 명령어에 대한 문서입니다.
+
+본 문서는 Hyperledger Fabric 버전 1.1을 기준으로 작성되었습니다.
+
+* 개요
+cryptogen은 Hyperledger fabric의 key material을 만들기 위한 유틸리티입니다.
+테스트 네트워크에서 설정으로 사용할 목적으로 만들어 졌으며, 일번적으로 메인 네트워크에서는 사용하지 않습니다.
+
+* 구문
+
+- help
+- generate
+- showtemplate
+- extend
+- version
