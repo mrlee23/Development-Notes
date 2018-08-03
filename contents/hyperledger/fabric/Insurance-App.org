@@ -19,4 +19,78 @@ $ ./build_ubuntu.sh # 우분투일 경우
 $ docker logs web
 #+END_SRC
 
-web 컨테이너에 오류가 없는지 확인하고 http://localhost:3000 에 접속하면 insurance 웹 페이지를 볼 수 있다.
+web 컨테이너에 오류가 없는지 확인하고 http://localhost:3000 에 접속하면 insurance 웹 페이지를 볼 수 있습니다.
+
+* 파일 구조
+
+- binary_{mac,ubuntu} :: configtxgen, cryptogen 실행파일이 위치해 있습니다.
+- 
+
+* 실행 내용 분석
+** ibm_fabric.sh
+#+BEGIN_SRC sh
+PROJPATH=$(pwd)
+CLIPATH=$PROJPATH/cli/peers
+ORDERERS=$CLIPATH/ordererOrganizations
+PEERS=$CLIPATH/peerOrganizations
+#+END_SRC
+
+위의 디렉토리 명을 나타내는 변수들을 선언합니다.
+
+*** cryptogen
+cryptogen 실행파일을 이용해 Hyperledger Fabric key material을 생성합니다.
+crypto-config.yaml 파일을 참조하여 $CLIPATH 경로에 결과물이 위치합니다.
+
+crypto-config.yaml 파일에는 OrdererOrgs, PeerOrgs 로 나뉘어져 있고, OrdererOrgs는 orderer가, PeerOrgs는 peer들이 위치해 있다.
+
+해당 명령을 실행하면 Peer 별로 디렉토리가 생기며 디렉토리는 아래와 같은 구조를 띈다.
+
+peerOrganizations
+- org
+  - ca
+    - 729e2f149444f4361070544120e840dd6ab7f2df0faf4d218f3483da6b1d416d_sk
+    - ca.org-cert.pem
+  - msp
+    - admincerts
+      - Admin@org-cert.pem
+    - cacerts
+      - ca.org-cert.pem
+    - tlscacerts
+      - tlsca.org-cert.pem
+  - peers
+    - org-peer
+      - msp
+        - admincerts
+          - Admin@org-cert.pem
+        - cacerts
+          - ca.org-cert.pem
+        - keystore
+          - 76a7c401012ad25f73aae7325691f61ab8b510d875a953ec9d8e20d84bb6a301_sk
+        - signcerts
+          - org-peer-cert.pem
+        - tlscacerts
+          - tlsca.org-cert.pem
+      - tls
+        - ca.crt
+        - server.crt
+        - server.key
+  - tlsca
+    - ff3f147b5002346dd408069acac2a91d19e6353459b027501819dd23abd31d98_sk
+    - tlsca.org-cert.pem
+  - users
+    - Admin@org
+      - msp
+        - admincerts
+          - Admin@org-cert.pem
+        - cacerts
+          - ca.org-cert.pem
+        - keystore
+          - 48b5da10d0a4c1fb49800525391e497a3300fda8cea126008b086b92e0794151_sk
+        - signcerts
+          - Admin@org-cert.pem
+        - tlscacerts
+          - tlsca.org-cert.pem
+      - tls
+        - ca.crt
+        - server.crt
+        - server.key
