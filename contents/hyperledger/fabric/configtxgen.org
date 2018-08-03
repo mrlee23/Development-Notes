@@ -1,0 +1,60 @@
+#+TITLE: configtxgen 명령어
+
+이 문서는 Hyperledger Fabric의 configtxgen 명령어에 대한 문서입니다.
+
+본 문서는 Hyperledger Fabric 버전 1.1을 기준으로 작성되었습니다.
+
+* 개요
+사용자에게 아티팩트와 관련된 Channel의 생성 및 설정을 할 수 있도록 권한을 부여합니다.
+~configtx.yaml~ 설정 파일에서 만들어진 데이터로 아티팩트가 생성됩니다.
+
+* 구문
+서브 명령어는 없지만, flags를 이용해 작업을 진행해야 합니다.
+
+-asOrg string
+      Performs the config generation as a particular organization (by name), only including values in the write set that org (likely) has privilege to set
+-channelID string
+      The channel ID to use in the configtx
+-configPath string
+      The path containing the configuration to use (if set)
+-inspectBlock string
+      Prints the configuration contained in the block at the specified path
+-inspectChannelCreateTx string
+      Prints the configuration contained in the transaction at the specified path
+-outputAnchorPeersUpdate string
+      Creates an config update to update an anchor peer (works only with the default channel creation, and only for the first update)
+-outputBlock string
+      The path to write the genesis block to (if set)
+-outputCreateChannelTx string
+      The path to write a channel creation configtx to (if set)
+-printOrg string
+      Prints the definition of an organization as JSON. (useful for adding an org to a channel manually)
+-profile string
+      The profile from configtx.yaml to use for generation. (default "SampleInsecureSolo")
+-version
+      Show version information
+
+* 사용법
+** 제네시스 블록 만들기
+
+#+BEGIN_SRC sh
+configtxgen -outputBlock genesis_block.pb -profile SampleSingleMSPSoloV1_1 -channelID orderer-system-channel
+#+END_SRC
+
+*SampleSingleMSPSoloV1_1* 프로파일의 *orderer-system-channel* 에 제네시스 블록 ~genesis_block.pb~ 를 생성합니다.
+
+** 채널 생성 트랜잭션 만들기
+
+#+BEGIN_SRC sh
+configtxgen -outputCreateChannelTx create_chan_tx.pb -profile SampleSingleMSPChannelV1_1 -channelID application-channel-1
+#+END_SRC
+
+*SampleSingleMSPChannelV1_1 프로파일의 *application-channel-1* 의 채널 ID를 갖는 ~create_chan_tx.pb~ 트랜잭션을 생성합니다.
+
+** 제네시스 블록 출력
+
+#+BEGIN_SRC sh
+configtxgen -inspectBlock genesis_block.pb
+#+END_SRC
+
+~genesis_block.pb~ 이름의 제네시스 블록을 JSON으로 출력합니다.
