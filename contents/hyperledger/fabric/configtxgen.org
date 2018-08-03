@@ -7,6 +7,7 @@
 * 개요
 사용자에게 아티팩트와 관련된 Channel의 생성 및 설정을 할 수 있도록 권한을 부여합니다.
 ~configtx.yaml~ 설정 파일에서 만들어진 데이터로 아티팩트가 생성됩니다.
+~configtx.yaml~ 위치를 지정하기 위해서는 환경 변수 =FABRIC_CFG_PATH= 가 지정되어야 합니다.
 
 * 구문
 서브 명령어는 없지만, flags를 이용해 작업을 진행해야 합니다.
@@ -58,3 +59,32 @@ configtxgen -inspectBlock genesis_block.pb
 #+END_SRC
 
 ~genesis_block.pb~ 이름의 제네시스 블록을 JSON으로 출력합니다.
+
+** 채널 정보 출력
+
+#+BEGIN_SRC sh
+configtxgen -inspectChannelCreateTx create_chan_tx.pb
+#+END_SRC
+
+~create_chan_tx.pb~ 채널 생성 트랜잭션에 해당하는 컨텐츠를 JSON으로 출력합니다.
+
+** Organization 정보 출력
+
+#+BEGIN_SRC sh
+configtxgen -printOrg Org1
+#+END_SRC
+
+~configtx.yaml~ 에 정의되어있는 MSPDir 등의 파라미터를 기준으로 organization 정의를 생성하고, JSON 형태로 출력한다.
+이 출력값은 사용자를 추가하는 등 채널 재설정 시에 유용하다.
+
+* 상세 설명
+~configtxgen~ 의 output은 거의 ~configtx.yaml~ 으로 제어가 가능합니다.
+해당 파일은 =FABRIC_CFG_PATH= 환경 변수 위치에서 찾게 되고,
+~configtxgen~ 명령어를 사용하기 위해서는 해당 환경 변수가 반드시 필요합니다.
+
+설정 파일의 개별적 변수 설정은 환경 변수 값으로 대체가 가능합니다. ~CONFIGTX_ORDERER_ORDERERTYPE=kafka~ 와 같이 사용할 수 있습니다.
+
+다양한 기능 활용을 위해서는 ~configtx.yaml~ 에 profile 이름이 설정되어야 합니다. 
+Profile은 여러 설정을 하나의 파일로 담기 위해 사용되며, 예를 들어 하나의 프로파일에 3개의 org를, 다른 하나의 프로파일에 4개의 org를 설정할 수 있다.
+yaml 파일의 기능에 따라 앵커 태깅을 ~&OrdererDefaults~ 와 같이 할 수 있고, 참조 타입을 <<: *OrdererDefaults 로 할 수 있습니다.
+
