@@ -94,3 +94,28 @@ peerOrganizations
         - ca.crt
         - server.crt
         - server.key
+
+** generate-cfgtx.sh
+
+configtxgen 명령을 이용해 genesis 블록과 channel, MSPAnchor 등을 생성합니다.
+루트 디렉토리의 configtx.yaml 파일을 이용합니다.
+
+#+BEGIN_SRC sh
+CHANNEL_NAME="default"
+PROJPATH=$(pwd)
+CLIPATH=$PROJPATH/cli/peers
+#+END_SRC
+
+*** generate-cfgtx.sh
+
+**** Profiles
+이 파일에는 FourOrgsGenesis, FourOrgsChannel 등 2개의 프로파일이 존재합니다.
+각 프로파일에는 Orderer, Consortiums, Application 등을 정의할 수 있습니다.
+
+**** Organizations
+
+**** Orderer
+
+**** Application
+*** configtxgen
+
