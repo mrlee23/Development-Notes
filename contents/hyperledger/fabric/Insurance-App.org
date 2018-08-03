@@ -38,6 +38,9 @@ PEERS=$CLIPATH/peerOrganizations
 위의 디렉토리 명을 나타내는 변수들을 선언합니다.
 
 *** cryptogen
+
+[[./cryptogen.org]] 문서를 참조하세요.
+
 cryptogen 실행파일을 이용해 Hyperledger Fabric key material을 생성합니다.
 crypto-config.yaml 파일을 참조하여 $CLIPATH 경로에 결과물이 위치합니다.
 
