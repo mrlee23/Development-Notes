@@ -44,6 +44,34 @@ $ sudo firewall-cmd --reload
 $ sudo systemctl restart sshd.service
 #+END_SRC
 
+* Ubuntu 14.04 ~
+** 설정 파일 변경
+
+#+BEGIN_SRC sh
+$ sudo vi /etc/ssh/sshd_config
+#+END_SRC
+
+해당 위치에서 변경할 포트 번호를 Port 뒤에 추가합니다.
+
+#+BEGIN_EXAMPLE
+Port 2222
+#+END_EXAMPLE 
+
+** 방화벽 설정
+
+#+BEGIN_SRC sh
+$ sudo ufw allow 2222/tcp
+#+END_SRC
+
+2222번 포트를 추가합니다.
+
+** sshd 재시작
+
+#+BEGIN_SRC sh
+$ sudo service ssh restart
+#+END_SRC
+
+
 * 구글 클라우드 플랫폼
 위의 설정을 마친 후
 
