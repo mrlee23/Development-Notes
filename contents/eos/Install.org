@@ -1,0 +1,26 @@
+#+TITLE: EOS 설치 방법
+
+* 로컬넷 런칭 방법
+
+** 요구사항
+- Docker 17.05 이상
+- docker-compose 1.10.0 이상
+
+** Git 다운로드
+
+#+BEGIN_SRC sh
+$ git clone https://github.com/EOSIO/eos --recursive
+#+END_SRC
+
+** EOS 이미지 빌드
+
+#+BEGIN_SRC sh
+$ cd eos/Docker
+$ docker build . -t eosio/eos
+#+END_SRC
+
+** 노드 시작
+
+#+BEGIN_SRC sh
+$ docker run --name nodeos -p 8888:8888 -p 9876:9876 -t eosio/eos nodeosd.sh -e --http-alias=nodeos:8888 --http-alias=127.0.0.1:8888 --http-alias=localhost:8888 arg1 arg2
+#+END_SRC
