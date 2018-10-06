@@ -1,0 +1,267 @@
+#+TITLE: Express에서 Vue.js를 사용하는 방법
+
+* 미리 설치
+#+BEGIN_SRC sh
+$ npm install -g express-generator
+$ npm install -g vue-cli
+#+END_SRC
+
+* 설치
+
+** Express 설치
+#+BEGIN_SRC sh
+$ express --view=jade backend
+$ cd backend
+$ npm install
+$ npm install connect-history-api-fallback
+$ DEBUG=backend:*
+$ npm start
+#+END_SRC
+
+
+http://localhost:3000 에 접속
+
+#+BEGIN_EXAMPLE
+Express
+Welcome to Express
+#+END_EXAMPLE
+
+위의 문구가 뜨는지 확인
+
+** Vue.js 설치
+#+BEGIN_SRC sh
+$ vue init webpack frontend # vue-router 꼭 추가할 것
+$ cd frontend
+$ npm install
+$ npm install --save axios
+$ npm start
+#+END_SRC
+
+http://localhost:8080 에 접속
+
+Vue.js 로고가 뜨는지 확인
+
+* Express X Vue.js 연동
+
+** Express 설정
+*** 간단한 API 작성
+
+ _backend/test.json_ 파일을 만들고 아래 정보를 입력
+
+ #+BEGIN_SRC js
+ [
+     {
+         "id": 1,
+         "name": "서준",
+         "age": "25"
+     },
+     {
+         "id": 2,
+         "name": "도윤",
+         "age": "30"
+     },
+     {
+         "id": 3,
+         "name": "주원",
+         "age": "21"
+     }
+ ]
+ #+END_SRC
+
+*** 라우터에 정보 입력
+
+ _backend/routes/test.js_ 파일을 만들고 아래 정보를 입력
+
+ #+BEGIN_SRC js
+ var express = require('express');
+ var router = express.Router();
+ var test = require('../test.json');
+
+ router.get('/', function (req, res, next) {
+   res.send(test)
+ });
+
+ router.get('/:id', function (req, res, next) {
+   var id = parseInt(req.params.id, 10)
+   var test = test.filter(function (elem) {
+     return elem.id === id
+   });
+   res.send(test)
+ });
+
+ module.exports = router;
+ #+END_SRC
+
+*** Express App.js 에 라우터 추가
+
+ _backend/app.js_ 파일에 3줄을 추가
+
+ #+BEGIN_SRC js
+ // ...
+ var indexRouter = require('./routes/index');
+ var usersRouter = require('./routes/users');
+ var testRouter = require('./routes/test'); // 이 줄 추가
+
+ // ...
+
+ var app = express();
+ app.use(require('connect-history-api-fallback')()); // 이 줄 추가
+
+ // ...
+
+ app.use('/', indexRouter);
+ app.use('/users', usersRouter);
+ app.use('/api/test', testRouter); // 이 줄 추가
+ #+END_SRC
+
+*** 테스트
+ #+BEGIN_SRC sh
+ $ DEBUG=backend:* npm start
+ #+END_SRC
+
+*** 확인
+ http://localhost:3000/api/test 에 접속 하면 test.json 파일의 정보를 볼 수 있다.
+ http://localhost:3000/api/test/1 에 접속하면 id 값이 1인 사용자 정보를 볼 수 있다.
+
+** Vue.js 설정
+
+*** 설정 추가
+
+ _frontend/config/index.js_ 파일의 proxyTable 객체를 찾아 안에 아래 내용 추가
+
+ #+BEGIN_SRC js
+proxyTable: {
+  '/api': {
+    target: 'http://localhost:3000/api',
+    changeOrigin: true,
+    pathRewrite: {
+      '^/api': ''
+    }
+  }
+},
+ #+END_SRC
+
+이 설정은 클라언트로부터 Vue.js(frontend) http://localhost:8080/api 요청이 오면 Express(backend) 부분인 http://localhost:3000/api 를 프록시로 사용한다.
+
+*** API 요청 처리
+
+_frontend/src/main.js_ 파일에 *axios* 를 추가한다.
+
+#+BEGIN_SRC js
+import axios from 'axios'
+Vue.prototype.$http = axios
+#+END_SRC
+
+이 설정 후에는 Vue 앱에서 this.$http로 HTTP 요청이 가능해진다.
+
+*** Vue.js 페이지 만들기
+
+모든 사용자가 보이는 페이지와 개별 사용자가 보이는 페이지 2개를 만든다.
+
+_frontend/src/components/AllUsersPage.vue_ 를 만든다.
+
+#+BEGIN_SRC js
+<template>
+  <div class="users">
+    <h1>사용자 목록</h1>
+    <div v-for="user in users" class="user">
+      <div>
+        <strong>{{user.name}}</strong>
+        <router-link :to="{ name: 'detail', params: { id: user.id }}">더보기</router-link>
+      </div>
+    </div>
+  </div>
+</template>
+
+<script>
+export default {
+  created () {
+    this.$http.get('/api/test')
+    .then((response) => {
+      this.users= response.data
+    })
+  },
+  data () {
+    return {
+      users: []
+    }
+  }
+}
+</script>
+#+END_SRC
+
+_frontend/src/components/UsersPage.vue_ 를 만든다.
+
+#+BEGIN_SRC js
+<template>
+  <div>
+    <h1>사용자 상세목록</h1>
+    <strong v-for="user in users">{{user.name}},{{user.age}}</strong>
+  </div>
+</template>
+
+<script>
+export default {
+  created: function () {
+    var id = this.$route.params.id
+    this.$http.get(`/api/test/${id}`)
+    .then((response) => {
+      this.users = response.data
+    })
+  },
+  data: function () {
+    return {
+      users: []
+    }
+  }
+}
+</script>
+#+END_SRC
+
+*** 사용자 페이지 라우터 연결
+
+_frontend/src/router/index.js_ 에 UsersPage, UserPage 를 연결해준다.
+
+mode: 'history' 를 추가해 히스토리 모드로 사용한다.
+
+#+BEGIN_SRC js
+...
+import Users from '@/components/AllUsersPage'
+import User from '@/components/UsersPage'
+...
+export default new Router({
+  mode: 'history',
+  routes: [
+    {
+      path: '/',
+      name: 'HelloWorld',
+      component: HellowWorld
+    },
+    {
+      path: '/user',
+      name: 'user',
+      component: Users
+    },
+    {
+      path: '/user/:id',
+      name: 'detail',
+      component: User
+     }
+  ]
+})
+#+END_SRC
+
+** 테스트
+#+BEGIN_SRC sh
+$ cd backend && npm start
+#+END_SRC
+
+#+BEGIN_SRC sh
+$ cd frontend && npm start
+#+END_SRC
+
+http://localhost:8080/api/test 에서 사용자 리스트를 볼 수 있다.
+http://localhost:8080/user 에서 사용자 리스트를 볼 수 있다.
+http://localhost:8080/user/1 에서 1번 사용자 정보를 볼 수 있다.
+
+
