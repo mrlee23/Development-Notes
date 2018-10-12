@@ -30,8 +30,6 @@ $ sudo yum-config-manager \
     --add-repo \
     https://download.docker.com/linux/centos/docker-ce.repo
 $ sudo yum install docker-ce
-$ sudo yum install docker-compose
-$ sudo systemctl start docker
 #+END_SRC
 
 *** Docker-compose
@@ -42,3 +40,8 @@ $ sudo chmod +x /usr/local/bin/docker-compose
 $ docker-compose --version
 #+END_SRC
 
+*** 테스트
+
+#+BEGIN_SRC sh
+$ sudo systemctl start docker
+#+END_SRC
