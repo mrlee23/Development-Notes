@@ -40,6 +40,16 @@ $ sudo chmod +x /usr/local/bin/docker-compose
 $ docker-compose --version
 #+END_SRC
 
+*** ~/.bashrc
+
+#+BEGIN_SRC sh
+export PATH=$PATH:/usr/local/bin
+#+END_SRC
+
+#+BEGIN_SRC sh
+$ source ~/.bashrc
+#+END_SRC
+
 *** 테스트
 
 #+BEGIN_SRC sh
