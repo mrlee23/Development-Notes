@@ -1,0 +1,14 @@
+#+TITLE: Nuxt.js 레이아웃 관련
+
+* 레이아웃 별 style 개별 설정
+
+- nuxt.config.js
+#+BEGIN_SRC js
+  build: {
+    splitChunks: {
+      layouts: true
+    },
+  }
+#+END_SRC
+
+레이아웃 별로 css/scss 가 개별로 설정된다.
