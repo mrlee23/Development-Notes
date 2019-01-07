@@ -1,0 +1,31 @@
+#+TITLE: kubectl 명령어
+
+* config
+** view
+`kubectl config view`
+
+현재 kubectl 클러스터 설정을 볼 수 있음.
+
+구조
+#+BEGIN_SRC yaml
+apiVersion: v1
+clusters:
+- cluster:
+  name:
+- cluster:
+  name:
+contexts:
+- context:
+    cluster:
+    user:
+  name:
+current-context: 
+kind: Config
+users:
+- name:
+  user:
+#+END_SRC
+
+- clusters: 현재 등록된 마스터 노드들의 정보
+- contexts: 클러스터 이름, 클러스터 사용자 정보 등의 정보
+- current-context

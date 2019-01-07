@@ -1,0 +1,13 @@
+#+TITLE: 쿠버네티스 사용하기
+
+1. 컨테이너 이미지 생성
+2. deployment
+
+* 배포
+- kubectl set image deployment [Deployment 이름] [Container 이름]=gcr.io/project-id/deployment:v2
+
+* 롤백
+
+- kubectl rollout history deployment/[Deployment 이름] :: 기존에 배포된 버전을 알 수 있다.
+- kubectl rollout undo deployment [ deployment 명 ] --to-revision=[롤백할 버전명]
+
