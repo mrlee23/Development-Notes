@@ -1,0 +1,25 @@
+#+TITLE: CSS Module 바인딩
+
+* 설치
+=npm i --save-dev style-loader css-loader=
+
+* CSS Module을 사용해서 클래스 난독화
+
+초기 설정은 =[local]_[hash:base64:5]= 로 되어 있고, 완전한 난독화를 위해서 해시만으로 남겨둔다.
+
+=extend= 옵션에서 =config.module.rules= 로 설정을 할 수도 있지만, 기본적으로 설정되어 있는 옵션은 변경이 불가하므로,
+lodaer를 통해 옵션을 설정한다.
+
+#+BEGIN_SRC js
+build: {
+  loaders: {
+    csssModules: {
+      localIdentName: '[hash:base64:5]'
+    }
+  }
+}
+#+END_SRC
+
+* 사용 방법
+사용하기 위해서는 module 속성을 추가하여야 한다. (ex. <style module>)
+설정이 완료되면 $style 로 클래스 이름을 접근할 수 있다.
