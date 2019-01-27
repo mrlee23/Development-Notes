@@ -1,0 +1,50 @@
+#+TITLE: Vue CSS Module
+
+* 문제 개요
+Vue에서 CSS module을 사용하여 개발을 하면서 클래스 정의만 하고 내부 프로퍼티를 설정하지 않고 사용을 했었다.
+개발환경에서는 잘 바인딩 되던 클래스가 production 환경에서 사라지는 문제가 생겼다.
+
+* 해결
+어떤 문제인지 찾아보다가 vue/webpack, css-loader, postcss 소스를 뒤져봤지만 단서라고는 postcss.process 부분이었다.
+
+옵션을 찾아봤는데 dev 환경과 production 환경의 플러그인 옵션 차이가 cssnano 단 하나였다.
+
+production 환경에서는 cssnano 가 추가되는 상태였기 때문에 프로퍼티가 비어있는 클래스는 제거가 되는 것이었다.
+
+옵션 스펙을 찾아보니 preset 에서 'default' 로 설정이 되어 있었고, cssnano-preset-default 소스코드를 살펴보니 아래와 같이 설정이 되어 있었다.
+
+여기서 options.discardEmpty 부분을 커멘트 처리를 해주니 내가 원하는 대로 클래스가 바인딩 되었다.
+
+#+BEGIN_SRC js
+  const plugins = [
+    [_postcssDiscardComments2.default, options.discardComments],
+    [_postcssMinifyGradients2.default, options.minifyGradients]
+    , [_postcssReduceInitial2.default, options.reduceInitial]
+    , [_postcssSvgo2.default, options.svgo]
+    , [_postcssNormalizeDisplayValues2.default, options.normalizeDisplayValues]
+    , [_postcssReduceTransforms2.default, options.reduceTransforms]
+    , [_postcssColormin2.default, options.colormin]
+    , [_postcssNormalizeTimingFunctions2.default, options.normalizeTimingFunctions]
+    , [_postcssCalc2.default, options.calc]
+    , [_postcssConvertValues2.default, options.convertValues]
+    , [_postcssOrderedValues2.default, options.orderedValues]
+    , [_postcssMinifySelectors2.default, options.minifySelectors]
+    , [_postcssMinifyParams2.default, options.minifyParams]
+    , [_postcssNormalizeCharset2.default, options.normalizeCharset]
+    , [_postcssDiscardOverridden2.default, options.discardOverridden]
+    , [_postcssNormalizeString2.default, options.normalizeString]
+    , [_postcssNormalizeUnicode2.default, options.normalizeUnicode]
+    , [_postcssMinifyFontValues2.default, options.minifyFontValues]
+    , [_postcssNormalizeUrl2.default, options.normalizeUrl]
+    , [_postcssNormalizeRepeatStyle2.default, options.normalizeRepeatStyle]
+    , [_postcssNormalizePositions2.default, options.normalizePositions]
+    , [_postcssNormalizeWhitespace2.default, options.normalizeWhitespace]
+    , [_postcssMergeLonghand2.default, options.mergeLonghand]
+    , [_postcssDiscardDuplicates2.default, options.discardDuplicates]
+    , [_postcssMergeRules2.default, options.mergeRules]
+    , [_postcssDiscardEmpty2.default, options.discardEmpty]
+    , [_postcssUniqueSelectors2.default, options.uniqueSelectors]
+    , [_cssDeclarationSorter2.default, options.cssDeclarationSorter]
+    , [_cssnanoUtilRawCache2.default, options.rawCache]
+                  ];
+#+END_SRC

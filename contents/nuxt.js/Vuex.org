@@ -1,0 +1,12 @@
+#+TITLE: Vuex
+
+* 기본 개념
+
+Vuex 는 Store 를 유지하는 플러그인이다.
+
+Nuxt 에서 Vuex 는 페이지 단위로 상태가 유지된다.
+
+* 모듈
+Nuxt는 =export const state= , =export const mutations= 등으로 파일 내부를 구성하면 파일이름 기준으로 모듈을 자동으로 만들어 준다.
+
+
