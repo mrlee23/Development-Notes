@@ -48,3 +48,23 @@ production 환경에서는 cssnano 가 추가되는 상태였기 때문에 프�
     , [_cssnanoUtilRawCache2.default, options.rawCache]
                   ];
 #+END_SRC
+
+webpack 부분에서 =PostcssConfig= 클래스의 =defaultConfig= getter 메소드에서 cssnano 기본 설정이 들어간다.
+
+외부에서 설정하기 위해서 =build.postcss.plugins.cssnano= 설정을 건드려 주면 되는데,
+
+#+BEGIN_SRC js
+  build: {
+    postcss: {
+      plugins: {
+        cssnano: {
+          preset: [
+            'default',
+            { discardEmpty: false}
+          ]
+        }
+      }
+    }
+#+END_SRC
+
+이렇게 빌드 부분을 수정해주면 완료!
