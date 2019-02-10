@@ -1,0 +1,23 @@
+#+TITLE: Git 설치
+
+* Cent OS 7
+
+wandisco 저장소 추가
+
+#+BEGIN_SRC sh
+rpm -Uvh http://opensource.wandisco.com/centos/7/git/x86_64/wandisco-git-release-7-2.noarch.rpm
+#+END_SRC
+
+#+BEGIN_SRC sh
+yum install git 
+#+END_SRC
+
+* Cent OS 6
+
+#+BEGIN_SRC sh
+rpm -Uvh http://opensource.wandisco.com/centos/6/git/x86_64/wandisco-git-release-6-1.noarch.rpm
+#+END_SRC
+
+#+BEGIN_SRC sh
+yum install git
+#+END_SRC
